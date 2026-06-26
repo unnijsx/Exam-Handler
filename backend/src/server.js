@@ -22,7 +22,27 @@ const app = express();
 connectDB();
 
 // Global Middlewares
-app.use(cors());
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://evalai.rheox.online'
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, postman)
+    if (!origin) return callback(null, true);
+    
+    const isAllowed = allowedOrigins.includes(origin) || 
+                      origin.endsWith('.vercel.app');
+                      
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
 // Set helmet, and disable contentSecurityPolicy if it causes issues serving static files or adjust it
 app.use(helmet({
   contentSecurityPolicy: false,
