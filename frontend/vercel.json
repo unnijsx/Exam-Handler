@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "http://localhost:5000/api/:path*"
+      "destination": "http://93.115.101.110:13697/api/:path*"
     },
     {
       "source": "/uploads/:path*",
-      "destination": "http://localhost:5000/uploads/:path*"
+      "destination": "http://93.115.101.110:13697/uploads/:path*"
     },
     {
       "source": "/(.*)",
