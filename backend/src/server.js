@@ -29,19 +29,28 @@ const autoSeed = async () => {
     const Question = require('./models/Question');
     const { questionsData } = require('./seed');
 
-    const adminCount = await Admin.countDocuments({});
-    if (adminCount === 0) {
-      console.log('AutoSeed: No admin found in database. Seeding default admin...');
-      const adminEmail = process.env.ADMIN_EMAIL || 'admin@eval';
-      const adminPassword = process.env.ADMIN_PASSWORD || 'admineval123';
-      const admin = new Admin({
-        email: adminEmail,
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@eval';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admineval123';
+
+    let admin = await Admin.findOne({ email: adminEmail.toLowerCase().trim() });
+    if (!admin) {
+      console.log(`AutoSeed: Admin "${adminEmail}" not found. Seeding default admin...`);
+      admin = new Admin({
+        email: adminEmail.toLowerCase().trim(),
         password: adminPassword,
       });
       await admin.save();
       console.log(`AutoSeed: Seeded admin account: ${adminEmail}`);
     } else {
-      console.log('AutoSeed: Admin check passed.');
+      const isMatch = await admin.comparePassword(adminPassword);
+      if (!isMatch) {
+        console.log(`AutoSeed: Admin password mismatch with environment. Updating password...`);
+        admin.password = adminPassword;
+        await admin.save();
+        console.log(`AutoSeed: Admin password updated successfully.`);
+      } else {
+        console.log(`AutoSeed: Admin "${adminEmail}" check passed.`);
+      }
     }
 
     const questionCount = await Question.countDocuments({});
