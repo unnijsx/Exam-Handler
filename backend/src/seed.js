@@ -373,8 +373,15 @@ const seedDB = async () => {
     process.exit(0);
   } catch (error) {
     console.error('Seed: Error seeding database:', error);
-    process.exit(1);
+    if (require.main === module) {
+      process.exit(1);
+    }
+    throw error;
   }
 };
 
-seedDB();
+module.exports = { questionsData, seedDB };
+
+if (require.main === module) {
+  seedDB();
+}

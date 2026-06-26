@@ -18,8 +18,44 @@ const reportRoutes = require('./routes/reportRoutes');
 
 const app = express();
 
-// Connect to MongoDB
-connectDB();
+// Connect to MongoDB and run autoseed check
+connectDB().then(() => {
+  autoSeed();
+});
+
+const autoSeed = async () => {
+  try {
+    const Admin = require('./models/Admin');
+    const Question = require('./models/Question');
+    const { questionsData } = require('./seed');
+
+    const adminCount = await Admin.countDocuments({});
+    if (adminCount === 0) {
+      console.log('AutoSeed: No admin found in database. Seeding default admin...');
+      const adminEmail = process.env.ADMIN_EMAIL || 'admin@eval';
+      const adminPassword = process.env.ADMIN_PASSWORD || 'admineval123';
+      const admin = new Admin({
+        email: adminEmail,
+        password: adminPassword,
+      });
+      await admin.save();
+      console.log(`AutoSeed: Seeded admin account: ${adminEmail}`);
+    } else {
+      console.log('AutoSeed: Admin check passed.');
+    }
+
+    const questionCount = await Question.countDocuments({});
+    if (questionCount === 0) {
+      console.log('AutoSeed: MCQ Question bank is empty. Seeding question bank...');
+      await Question.insertMany(questionsData);
+      console.log(`AutoSeed: Seeded ${questionsData.length} MCQ questions successfully.`);
+    } else {
+      console.log('AutoSeed: MCQ Question bank check passed.');
+    }
+  } catch (error) {
+    console.error('AutoSeed: Error during automatic check/seeding:', error.message);
+  }
+};
 
 // Global Middlewares
 const allowedOrigins = [
