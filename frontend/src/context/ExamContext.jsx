@@ -238,7 +238,7 @@ export const ExamProvider = ({ children }) => {
 
     saveIntervalRef.current = setInterval(() => {
       saveState();
-    }, 13697); // Save time and answers every 5 seconds
+    }, 5000); // Save time and answers every 5 seconds
 
     return () => {
       if (saveIntervalRef.current) clearInterval(saveIntervalRef.current);
