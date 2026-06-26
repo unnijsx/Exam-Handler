@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://evlai.rheox.online/api/:path*"
+      "destination": "http://93.115.101.110:13697/api/:path*"
     },
     {
       "source": "/uploads/:path*",
-      "destination": "https://evlai.rheox.online/uploads/:path*"
+      "destination": "http://93.115.101.110:13697/uploads/:path*"
     },
     {
       "source": "/(.*)",
