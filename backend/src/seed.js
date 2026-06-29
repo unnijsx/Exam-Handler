@@ -571,27 +571,27 @@ const questionsData = [
   // --- CNN ---
   {
     topic: 'CNN',
-    questionText: 'Which layer in a CNN is responsible for feature extraction using sliding kernels?',
-    options: ['Pooling Layer', 'Fully Connected Layer', 'Convolutional Layer', 'Flatten Layer'],
+    questionText: 'Which layer in a CNN is primarily responsible for extracting features from an image?',
+    options: ['Convolutional Layer', 'Pooling Layer', 'Flatten Layer', 'Fully Connected Layer'],
     correctAnswer: 'Convolutional Layer'
   },
   {
     topic: 'CNN',
-    questionText: 'What is the main benefit of a Max Pooling layer in a CNN?',
-    options: ['It adds non-linearity', 'It downsamples spatial size, reducing parameters and computation', 'It increases channels count', 'It flattens tensors to 1D'],
-    correctAnswer: 'It downsamples spatial size, reducing parameters and computation'
+    questionText: 'What is the main purpose of a Max Pooling layer in a CNN?',
+    options: ['To reduce the image size (downsample)', 'To increase the number of colors', 'To connect the neural network layers', 'To train the model faster by adding weights'],
+    correctAnswer: 'To reduce the image size (downsample)'
   },
   {
     topic: 'CNN',
-    questionText: 'Which activation function is most commonly used in the hidden layers of CNNs?',
-    options: ['Sigmoid', 'Tanh', 'ReLU', 'Softmax'],
+    questionText: 'Which activation function is most commonly used in the hidden layers of a CNN?',
+    options: ['ReLU', 'Sigmoid', 'Tanh', 'Softmax'],
     correctAnswer: 'ReLU'
   },
   {
     topic: 'CNN',
-    questionText: 'What is the purpose of the Softmax layer at the end of a multi-class CNN classification model?',
-    options: ['To normalize weights', 'To output probability distributions matching the classes count', 'To compute max pooling', 'To perform convolution'],
-    correctAnswer: 'To output probability distributions matching the classes count'
+    questionText: 'What is the purpose of the Softmax function at the output layer of a CNN classifier?',
+    options: ['To output final class probabilities (percentage)', 'To extract features from images', 'To reduce the image size', 'To flatten the image into a 1D vector'],
+    correctAnswer: 'To output final class probabilities (percentage)'
   },
   {
     topic: 'CNN',
@@ -601,33 +601,33 @@ const questionsData = [
   },
   {
     topic: 'CNN',
-    questionText: 'For which type of data are Convolutional Neural Networks (CNNs) most commonly used?',
-    options: ['Tabular spreadsheet data', 'Text documents', 'Images and visual data', 'Audio files only'],
-    correctAnswer: 'Images and visual data'
+    questionText: 'For which type of data are CNNs most commonly used?',
+    options: ['Images and videos', 'Text documents', 'Excel spreadsheets', 'SQL databases'],
+    correctAnswer: 'Images and videos'
   },
   {
     topic: 'CNN',
-    questionText: 'In a convolutional layer, what is the sliding window/matrix that performs multiplication over the input image called?',
-    options: ['Kernel (or Filter)', 'Biases', 'Activation', 'Pooling window'],
-    correctAnswer: 'Kernel (or Filter)'
+    questionText: 'In a CNN, what is the sliding window that extracts features from the image called?',
+    options: ['Filter (or Kernel)', 'Weight matrix', 'Input vector', 'Bias value'],
+    correctAnswer: 'Filter (or Kernel)'
   },
   {
     topic: 'CNN',
-    questionText: 'What is the output shape transition after applying a standard pooling layer in a CNN?',
-    options: ['Increases height and width', 'Decreases height and width (spatial size)', 'Increases channels count', 'Does not change anything'],
-    correctAnswer: 'Decreases height and width (spatial size)'
+    questionText: 'What does a pooling layer do in a CNN?',
+    options: ['Reduces the spatial size of the image', 'Increases the resolution of the image', 'Adds new colors to the image', 'Converts text into images'],
+    correctAnswer: 'Reduces the spatial size of the image'
   },
   {
     topic: 'CNN',
-    questionText: 'Which of the following layers is typically used to flatten the multi-dimensional output of a convolutional layer into a 1D vector before passing it to a fully connected layer?',
-    options: ['Convolutional Layer', 'Pooling Layer', 'Flatten Layer', 'Dropout Layer'],
+    questionText: 'Which layer converts a 2D feature map into a 1D vector before passing it to the final classifier?',
+    options: ['Flatten Layer', 'Pooling Layer', 'Convolutional Layer', 'Activation Layer'],
     correctAnswer: 'Flatten Layer'
   },
   {
     topic: 'CNN',
-    questionText: 'In a CNN, what does the term "Stride" refer to?',
-    options: ['The size of the kernel matrix', 'The step size by which the filter/kernel slides across the input image', 'The activation value of the neuron', 'The number of channels in the input'],
-    correctAnswer: 'The step size by which the filter/kernel slides across the input image'
+    questionText: 'In a CNN, what does "Stride" mean?',
+    options: ['The step size by which the filter slides across the image', 'The size of the input image', 'The number of channels in the filter', 'The activation value of the neuron'],
+    correctAnswer: 'The step size by which the filter slides across the image'
   }
 ];
 
