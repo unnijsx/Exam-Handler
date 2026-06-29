@@ -59,7 +59,7 @@ The user has uploaded three screenshots which are attached below in order:
 2. Accuracy Graph Screenshot (accuracy & loss curves plot)
 3. Prediction Output Screenshot (sample test predictions with labels)
 
-Please review the code and visual outcomes carefully. If the screenshots do not match the assigned classes, or look fraudulent/copied, penalize appropriately in dataset handling and output quality, and note this in the summary.
+Please review the code and visual outcomes carefully. Note that the student is only required to show predictions or outputs for at least one of their three assigned classes (e.g., if they are assigned ['Dog', 'Cat', 'Cow'], a screenshot showing predictions for just 'Dog' is fully acceptable; they do not need to show predictions for all three classes). Do not penalize them if they show predictions for at least one of their assigned classes. However, if the screenshots completely fail to match any of their assigned classes, or look fraudulent/copied, then penalize them appropriately in dataset handling and output quality, and note this in the summary.
 
 Provide a detailed summary in your markdown overallSummary detailing what they did well and where they can improve.
 

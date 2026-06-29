@@ -307,7 +307,7 @@ const StudentReview = () => {
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                 <Typography variant="subtitle1" sx={{ fontWeight: 800, display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <AutoAwesome color="primary" /> Gemini AI Evaluator
+                  <AutoAwesome color="primary" /> Gemini AI Reviewer
                 </Typography>
                 <Button
                   variant="contained"
@@ -317,7 +317,7 @@ const StudentReview = () => {
                   onClick={handleAiEvaluate}
                   disabled={evaluating || !submission}
                 >
-                  {evaluating ? 'Evaluating...' : 'AI Evaluate'}
+                  {evaluating ? 'Reviewing...' : 'AI Review'}
                 </Button>
               </Box>
 
@@ -366,7 +366,7 @@ const StudentReview = () => {
                 </Box>
               ) : (
                 <Alert severity="info" sx={{ borderRadius: '8px' }}>
-                  No AI evaluation details available. Click the <strong>AI Evaluate</strong> button above to request Google Gemini to evaluate the submissions.
+                  No AI evaluation details available. Click the <strong>AI Review</strong> button above to request Google Gemini to evaluate the submissions.
                 </Alert>
               )}
             </CardContent>

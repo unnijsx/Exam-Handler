@@ -62,23 +62,34 @@ const StudentManagement = () => {
  
     setBulkEvaluating(true);
     setFormError('');
- 
-    try {
-      for (let i = 0; i < completedStudents.length; i++) {
-        const student = completedStudents[i];
-        setBulkProgress(`${i + 1}/${completedStudents.length}`);
+    const failedStudents = [];
+
+    for (let i = 0; i < completedStudents.length; i++) {
+      const student = completedStudents[i];
+      setBulkProgress(`${i + 1}/${completedStudents.length}`);
+      try {
         await api.post(`/evaluations/${student._id}/evaluate`);
+      } catch (err) {
+        console.error(`AI Evaluation failed for student ${student.fullName}:`, err);
+        failedStudents.push(`${student.fullName} (${err.response?.data?.message || 'No submission or connection error'})`);
+      }
+      
+      try {
         const refreshResponse = await api.get(`/students?search=${searchRef.current}&status=${statusFilter}`);
         setStudents(refreshResponse.data);
+      } catch (refreshErr) {
+        console.error('Failed to refresh students list during bulk evaluation:', refreshErr);
       }
-      alert('AI Evaluation completed for all finished students.');
-    } catch (err) {
-      console.error('AI Bulk Evaluation Error:', err);
-      setFormError(err.response?.data?.message || 'Error occurred during sequential AI evaluation.');
-    } finally {
-      setBulkEvaluating(false);
-      setBulkProgress('');
-      fetchStudents();
+    }
+
+    setBulkEvaluating(false);
+    setBulkProgress('');
+    fetchStudents();
+
+    if (failedStudents.length > 0) {
+      alert(`AI Review completed with some skipped/failed students:\n\n${failedStudents.join('\n')}`);
+    } else {
+      alert('AI Review completed for all completed students successfully.');
     }
   };
  
@@ -310,7 +321,7 @@ const StudentManagement = () => {
             disabled={bulkEvaluating}
             sx={{ fontWeight: 'bold' }}
           >
-            {bulkEvaluating ? `Evaluating... (${bulkProgress})` : 'AI Evaluate All Completed'}
+            {bulkEvaluating ? `Reviewing... (${bulkProgress})` : 'AI Review All Completed'}
           </Button>
           <Button
             variant="contained"
@@ -496,20 +507,17 @@ const StudentManagement = () => {
                         </IconButton>
                       )}
                       {student.examStatus === 'completed' && (
-                        <IconButton
+                        <Button
                           size="small"
+                          variant="contained"
                           color="primary"
                           onClick={() => handleIndividualEvaluate(student._id)}
                           disabled={evaluatingStudentId === student._id}
-                          title="Trigger AI Evaluation"
-                          sx={{ mr: 0.5 }}
+                          startIcon={evaluatingStudentId === student._id ? <CircularProgress size={14} color="inherit" /> : <AutoAwesome fontSize="small" />}
+                          sx={{ mr: 0.5, py: 0.2, px: 1, fontSize: '0.7rem', fontWeight: 'bold', textTransform: 'none' }}
                         >
-                          {evaluatingStudentId === student._id ? (
-                            <CircularProgress size={18} />
-                          ) : (
-                            <AutoAwesome fontSize="small" />
-                          )}
-                        </IconButton>
+                          {evaluatingStudentId === student._id ? 'Reviewing' : 'AI Review'}
+                        </Button>
                       )}
                       <IconButton size="small" color="primary" onClick={() => navigate(`/admin/review/${student._id}`)}>
                         <Visibility fontSize="small" />
