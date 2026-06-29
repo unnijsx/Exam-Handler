@@ -656,13 +656,8 @@ const seedDB = async () => {
     await Question.insertMany(questionsData);
     console.log(`Seed: Seeded ${questionsData.length} MCQ questions successfully.`);
 
-    // Clear old student sessions and records to avoid inconsistencies
-    console.log('Seed: Cleaning stale test student records...');
-    await Student.deleteMany({});
-    await ExamSession.deleteMany({});
-    await Result.deleteMany({});
-    await CodingSubmission.deleteMany({});
-    console.log('Seed: Database cleaned. Ready to use!');
+    // Seeding is complete
+    console.log('Seed: Database seeded. Ready to use!');
 
     mongoose.connection.close();
     console.log('Seed: Connection closed.');
