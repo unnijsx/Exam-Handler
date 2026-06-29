@@ -58,7 +58,7 @@ const QuestionBank = () => {
   });
 
   // Extract unique topics for dropdown
-  const uniqueTopics = ['PYTHON', 'NUMPY', 'PANDAS', 'MATPLOTLIB', 'EDA', 'AI/ML BASICS', 'LINEAR REGRESSION', 'LOGISTIC REGRESSION', 'DECISION TREE', 'DEEP LEARNING', 'CNN', 'YOLO', 'NLP'];
+  const uniqueTopics = ['PYTHON', 'NUMPY', 'PANDAS', 'MATPLOTLIB', 'EDA', 'AI/ML BASICS', 'LINEAR REGRESSION', 'LOGISTIC REGRESSION', 'DECISION TREE', 'DEEP LEARNING', 'CNN'];
 
   // Add Question Submit
   const handleAddSubmit = async (e) => {

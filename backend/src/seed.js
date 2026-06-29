@@ -69,6 +69,36 @@ const questionsData = [
     options: ['/', '%', '//', '**'],
     correctAnswer: '//'
   },
+  {
+    topic: 'PYTHON',
+    questionText: 'Which character is used to start a single-line comment in Python?',
+    options: ['//', '#', '/*', '--'],
+    correctAnswer: '#'
+  },
+  {
+    topic: 'PYTHON',
+    questionText: 'How do you create a variable with the numeric value 5 in Python?',
+    options: ['int x = 5', 'x = 5', 'var x = 5', 'x := 5'],
+    correctAnswer: 'x = 5'
+  },
+  {
+    topic: 'PYTHON',
+    questionText: 'Which of the following is NOT a valid variable name in Python?',
+    options: ['my_var', 'var_2', '2var', '_var'],
+    correctAnswer: '2var'
+  },
+  {
+    topic: 'PYTHON',
+    questionText: 'What is the output of print("Hello" + " " + "World") in Python?',
+    options: ['Hello + World', 'Hello World', 'HelloWorld', 'Error'],
+    correctAnswer: 'Hello World'
+  },
+  {
+    topic: 'PYTHON',
+    questionText: 'Which loop is commonly used to repeat a block of code a specific number of times or iterate over a list in Python?',
+    options: ['loop', 'for', 'repeat', 'foreach'],
+    correctAnswer: 'for'
+  },
 
   // --- NUMPY ---
   {
@@ -100,6 +130,36 @@ const questionsData = [
     questionText: 'How do you select the element at row index 1 and column index 2 of a 2D NumPy array "arr"?',
     options: ['arr[1, 2]', 'arr[1][2]', 'Both arr[1, 2] and arr[1][2]', 'arr(1, 2)'],
     correctAnswer: 'Both arr[1, 2] and arr[1][2]'
+  },
+  {
+    topic: 'NUMPY',
+    questionText: 'What does the name "NumPy" stand for?',
+    options: ['Number Python', 'Numerical Python', 'Null Python', 'New Python'],
+    correctAnswer: 'Numerical Python'
+  },
+  {
+    topic: 'NUMPY',
+    questionText: 'How do you import the NumPy library using the standard alias "np"?',
+    options: ['import numpy as np', 'import np from numpy', 'include numpy as np', 'import numpy'],
+    correctAnswer: 'import numpy as np'
+  },
+  {
+    topic: 'NUMPY',
+    questionText: 'What is the main multi-dimensional array object in NumPy?',
+    options: ['list', 'DataFrame', 'ndarray', 'Series'],
+    correctAnswer: 'ndarray'
+  },
+  {
+    topic: 'NUMPY',
+    questionText: 'Which NumPy function is used to create an array filled with all zeros?',
+    options: ['np.zeros()', 'np.empty()', 'np.nulls()', 'np.fill(0)'],
+    correctAnswer: 'np.zeros()'
+  },
+  {
+    topic: 'NUMPY',
+    questionText: "How do you find the minimum value in a NumPy array 'arr'?",
+    options: ['arr.min()', 'arr.minimum()', 'np.minimum_value(arr)', 'min(arr)'],
+    correctAnswer: 'arr.min()'
   },
 
   // --- PANDAS ---
@@ -139,6 +199,36 @@ const questionsData = [
     options: ['df.fillna()', 'df.replace_nan()', 'df.dropna()', 'df.interpolate()'],
     correctAnswer: 'df.fillna()'
   },
+  {
+    topic: 'PANDAS',
+    questionText: 'How do you import the Pandas library using the standard alias "pd"?',
+    options: ['import pandas as pd', 'import pd from pandas', 'import pandas', 'require pandas as pd'],
+    correctAnswer: 'import pandas as pd'
+  },
+  {
+    topic: 'PANDAS',
+    questionText: 'What are the two primary data structures in Pandas?',
+    options: ['Array and List', 'Series and DataFrame', 'Dictionary and Tuple', 'Matrix and Vector'],
+    correctAnswer: 'Series and DataFrame'
+  },
+  {
+    topic: 'PANDAS',
+    questionText: "Which attribute of a Pandas DataFrame 'df' is used to get its number of rows and columns?",
+    options: ['df.size', 'df.shape', 'df.length', 'df.dimensions'],
+    correctAnswer: 'df.shape'
+  },
+  {
+    topic: 'PANDAS',
+    questionText: "How do you select a single column named 'Age' from a DataFrame 'df'?",
+    options: ['df.select("Age")', "df['Age']", 'df.column("Age")', 'df.get("Age")'],
+    correctAnswer: "df['Age']"
+  },
+  {
+    topic: 'PANDAS',
+    questionText: 'Which Pandas method is commonly used to detect missing or null values in a DataFrame?',
+    options: ['df.isnull()', 'df.is_empty()', 'df.check_null()', 'df.missing()'],
+    correctAnswer: 'df.isnull()'
+  },
 
   // --- MATPLOTLIB ---
   {
@@ -164,6 +254,30 @@ const questionsData = [
     questionText: 'Which Matplotlib function is used to label the x-axis?',
     options: ['plt.xlabel()', 'plt.x_label()', 'plt.label_x()', 'plt.xaxis()'],
     correctAnswer: 'plt.xlabel()'
+  },
+  {
+    topic: 'MATPLOTLIB',
+    questionText: "Which module of Matplotlib is most commonly imported as 'plt'?",
+    options: ['matplotlib.pyplot', 'matplotlib.plot', 'matplotlib.charts', 'matplotlib.show'],
+    correctAnswer: 'matplotlib.pyplot'
+  },
+  {
+    topic: 'MATPLOTLIB',
+    questionText: 'Which function is used to display the final plot on the screen in Matplotlib?',
+    options: ['plt.display()', 'plt.show()', 'plt.print()', 'plt.render()'],
+    correctAnswer: 'plt.show()'
+  },
+  {
+    topic: 'MATPLOTLIB',
+    questionText: 'Which function is used to set a label for the vertical axis (y-axis) in Matplotlib?',
+    options: ['plt.ylabel()', 'plt.y_label()', 'plt.label_y()', 'plt.yaxis()'],
+    correctAnswer: 'plt.ylabel()'
+  },
+  {
+    topic: 'MATPLOTLIB',
+    questionText: 'Which Matplotlib function is used to create a bar chart?',
+    options: ['plt.bar()', 'plt.barchart()', 'plt.draw_bar()', 'plt.column()'],
+    correctAnswer: 'plt.bar()'
   },
 
   // --- EDA ---
@@ -197,6 +311,36 @@ const questionsData = [
     options: ['It decreases execution speed', 'It reduces overfitting and improves model accuracy by removing irrelevant features', 'It generates new labels', 'It increases dataset dimensions'],
     correctAnswer: 'It reduces overfitting and improves model accuracy by removing irrelevant features'
   },
+  {
+    topic: 'EDA',
+    questionText: 'What does EDA stand for in data science?',
+    options: ['Easy Data Analysis', 'Exploratory Data Analysis', 'Efficient Data Assessment', 'External Data Alignment'],
+    correctAnswer: 'Exploratory Data Analysis'
+  },
+  {
+    topic: 'EDA',
+    questionText: 'Which plot is best suited to visualize the distribution of a single numerical variable?',
+    options: ['Scatter Plot', 'Line Plot', 'Histogram', 'Pie Chart'],
+    correctAnswer: 'Histogram'
+  },
+  {
+    topic: 'EDA',
+    questionText: 'What does a correlation value of 1 indicate between two variables?',
+    options: ['No linear relationship', 'Perfect positive linear relationship', 'Perfect negative linear relationship', 'Weak relationship'],
+    correctAnswer: 'Perfect positive linear relationship'
+  },
+  {
+    topic: 'EDA',
+    questionText: 'Which of the following is commonly used to visualize statistical summaries like the median, quartiles, and outliers?',
+    options: ['Line Chart', 'Pie Chart', 'Box Plot', 'Scatter Plot'],
+    correctAnswer: 'Box Plot'
+  },
+  {
+    topic: 'EDA',
+    questionText: 'Which value represents the most frequently occurring value in a dataset?',
+    options: ['Mean', 'Median', 'Mode', 'Variance'],
+    correctAnswer: 'Mode'
+  },
 
   // --- AI/ML BASICS ---
   {
@@ -223,6 +367,30 @@ const questionsData = [
     options: ['Label', 'Weight', 'Feature', 'Bias'],
     correctAnswer: 'Feature'
   },
+  {
+    topic: 'AI/ML BASICS',
+    questionText: 'What type of machine learning task is predicting whether an email is "Spam" or "Not Spam"?',
+    options: ['Clustering', 'Classification', 'Regression', 'Dimensionality Reduction'],
+    correctAnswer: 'Classification'
+  },
+  {
+    topic: 'AI/ML BASICS',
+    questionText: "What type of machine learning task is predicting a continuous numeric value, such as a student's final exam score?",
+    options: ['Classification', 'Clustering', 'Regression', 'Association'],
+    correctAnswer: 'Regression'
+  },
+  {
+    topic: 'AI/ML BASICS',
+    questionText: 'In machine learning, what do we call the final output value we are trying to predict?',
+    options: ['Feature', 'Weight', 'Label (or Target)', 'Bias'],
+    correctAnswer: 'Label (or Target)'
+  },
+  {
+    topic: 'AI/ML BASICS',
+    questionText: 'Which of the following is NOT a main paradigm of Machine Learning?',
+    options: ['Supervised Learning', 'Unsupervised Learning', 'Reinforcement Learning', 'Compiler Optimization'],
+    correctAnswer: 'Compiler Optimization'
+  },
 
   // --- LINEAR REGRESSION ---
   {
@@ -236,6 +404,36 @@ const questionsData = [
     questionText: 'In y = mx + c, what does the coefficient "m" represent?',
     options: ['Intercept', 'Slope', 'Dependent Variable', 'Error term'],
     correctAnswer: 'Slope'
+  },
+  {
+    topic: 'LINEAR REGRESSION',
+    questionText: "In the simple linear regression equation y = mx + c, what does 'x' represent?",
+    options: ['Dependent variable', 'Independent variable (Feature)', 'Error term', 'Slope'],
+    correctAnswer: 'Independent variable (Feature)'
+  },
+  {
+    topic: 'LINEAR REGRESSION',
+    questionText: 'Which of the following is a common evaluation metric for regression models?',
+    options: ['Accuracy', 'F1-Score', 'Mean Absolute Error (MAE)', 'Precision'],
+    correctAnswer: 'Mean Absolute Error (MAE)'
+  },
+  {
+    topic: 'LINEAR REGRESSION',
+    questionText: 'What shape does a simple linear regression model produce when plotted on a 2D grid?',
+    options: ['A parabola', 'A circle', 'A straight line', 'An exponential curve'],
+    correctAnswer: 'A straight line'
+  },
+  {
+    topic: 'LINEAR REGRESSION',
+    questionText: 'If a regression model performs extremely well on the training data but fails to generalize to the test data, it is said to be:',
+    options: ['Underfitting', 'Overfitting', 'Optimized', 'Unsupervised'],
+    correctAnswer: 'Overfitting'
+  },
+  {
+    topic: 'LINEAR REGRESSION',
+    questionText: 'In Linear Regression, what does a correlation coefficient of 0 between two variables suggest?',
+    options: ['Perfect positive relationship', 'Perfect negative relationship', 'No linear relationship', 'Strong relationship'],
+    correctAnswer: 'No linear relationship'
   },
 
   // --- LOGISTIC REGRESSION ---
@@ -251,6 +449,36 @@ const questionsData = [
     options: ['Continuous values regression', 'Clustering', 'Classification', 'Dimensionality reduction'],
     correctAnswer: 'Classification'
   },
+  {
+    topic: 'LOGISTIC REGRESSION',
+    questionText: 'Which function is used in Logistic Regression to map any real-valued number to a probability value between 0 and 1?',
+    options: ['ReLU function', 'Sigmoid function', 'Step function', 'Linear function'],
+    correctAnswer: 'Sigmoid function'
+  },
+  {
+    topic: 'LOGISTIC REGRESSION',
+    questionText: 'For a binary classification task, how many possible class labels are there?',
+    options: ['1', '2', '10', 'Infinite'],
+    correctAnswer: '2'
+  },
+  {
+    topic: 'LOGISTIC REGRESSION',
+    questionText: 'In logistic regression, if the output probability is 0.70 and the decision threshold is 0.50, what class label is predicted?',
+    options: ['0 (Negative Class)', '1 (Positive Class)', '0.50', 'Cannot predict'],
+    correctAnswer: '1 (Positive Class)'
+  },
+  {
+    topic: 'LOGISTIC REGRESSION',
+    questionText: "Which of the following metrics is most commonly used to evaluate a classification model's correct prediction rate?",
+    options: ['Mean Squared Error', 'R-squared', 'Accuracy', 'Root Mean Squared Error'],
+    correctAnswer: 'Accuracy'
+  },
+  {
+    topic: 'LOGISTIC REGRESSION',
+    questionText: 'Which of the following is the most standard cost function optimized in Logistic Regression?',
+    options: ['Mean Squared Error (MSE)', 'Binary Cross-Entropy (or Log Loss)', 'Mean Absolute Error (MAE)', 'R-squared'],
+    correctAnswer: 'Binary Cross-Entropy (or Log Loss)'
+  },
 
   // --- DECISION TREE ---
   {
@@ -265,6 +493,36 @@ const questionsData = [
     options: ['A splitting condition', 'A feature index', 'A final decision or class label', 'The start of the tree'],
     correctAnswer: 'A final decision or class label'
   },
+  {
+    topic: 'DECISION TREE',
+    questionText: 'Decision Trees can be used for both classification and regression tasks.',
+    options: ['True', 'False', 'Only classification', 'Only regression'],
+    correctAnswer: 'True'
+  },
+  {
+    topic: 'DECISION TREE',
+    questionText: 'What is the term for reducing the size of a decision tree by removing sections that provide little power to classify instances?',
+    options: ['Sprouting', 'Pruning', 'Trimming', 'Watering'],
+    correctAnswer: 'Pruning'
+  },
+  {
+    topic: 'DECISION TREE',
+    questionText: 'What is a major advantage of Decision Tree models compared to neural networks?',
+    options: ['They always require massive datasets', 'They are easy to interpret and visualize', 'They contain infinite parameters', 'They are completely black-box models'],
+    correctAnswer: 'They are easy to interpret and visualize'
+  },
+  {
+    topic: 'DECISION TREE',
+    questionText: 'What is a node in a decision tree called if it splits into further sub-nodes?',
+    options: ['Leaf Node', 'Internal Node (or Split Node)', 'Terminal Node', 'Root Node only'],
+    correctAnswer: 'Internal Node (or Split Node)'
+  },
+  {
+    topic: 'DECISION TREE',
+    questionText: 'What name is given to the final nodes at the bottom of a Decision Tree that do not split any further?',
+    options: ['Root Nodes', 'Internal Nodes', 'Branch Nodes', 'Leaf Nodes (or Terminal Nodes)'],
+    correctAnswer: 'Leaf Nodes (or Terminal Nodes)'
+  },
 
   // --- DEEP LEARNING ---
   {
@@ -278,6 +536,36 @@ const questionsData = [
     questionText: 'What is the role of an activation function in a deep neural network?',
     options: ['To initialize weights', 'To introduce non-linearity so the network can learn complex patterns', 'To regularize learning rates', 'To reshape tensors'],
     correctAnswer: 'To introduce non-linearity so the network can learn complex patterns'
+  },
+  {
+    topic: 'DEEP LEARNING',
+    questionText: 'What is the basic computational unit of an artificial neural network, inspired by the biological brain?',
+    options: ['Neuron (or Perceptron)', 'Transistor', 'Resistor', 'Kernel'],
+    correctAnswer: 'Neuron (or Perceptron)'
+  },
+  {
+    topic: 'DEEP LEARNING',
+    questionText: 'A neural network with multiple hidden layers is generally called a:',
+    options: ['Shallow Neural Network', 'Deep Neural Network', 'Linear Network', 'Single-layer Perceptron'],
+    correctAnswer: 'Deep Neural Network'
+  },
+  {
+    topic: 'DEEP LEARNING',
+    questionText: 'Which of the following is a widely used optimizer for updating weights during training in Deep Learning?',
+    options: ['Adam', 'JSON', 'Matplotlib', 'Pandas'],
+    correctAnswer: 'Adam'
+  },
+  {
+    topic: 'DEEP LEARNING',
+    questionText: 'Which layer in a neural network lies between the input layer and the output layer?',
+    options: ['Hidden Layer', 'Visible Layer', 'First Layer', 'Last Layer'],
+    correctAnswer: 'Hidden Layer'
+  },
+  {
+    topic: 'DEEP LEARNING',
+    questionText: 'What is the process of passing input data forward through the layers of a neural network to get a prediction called?',
+    options: ['Backpropagation', 'Forward Propagation', 'Weight Initialization', 'Gradient Descent'],
+    correctAnswer: 'Forward Propagation'
   },
 
   // --- CNN ---
@@ -305,33 +593,41 @@ const questionsData = [
     options: ['To normalize weights', 'To output probability distributions matching the classes count', 'To compute max pooling', 'To perform convolution'],
     correctAnswer: 'To output probability distributions matching the classes count'
   },
-
-  // --- YOLO ---
   {
-    topic: 'YOLO',
-    questionText: 'What does the acronym YOLO stand for in deep learning object detection?',
-    options: ['You Only Live Once', 'You Only Look Once', 'Yield Output Logic Optimization', 'Yet Other Linear Optimizer'],
-    correctAnswer: 'You Only Look Once'
+    topic: 'CNN',
+    questionText: 'What does CNN stand for in Deep Learning?',
+    options: ['Convolutional Neural Network', 'Computer Network Node', 'Computational Neural Node', 'Cyclic Network Node'],
+    correctAnswer: 'Convolutional Neural Network'
   },
   {
-    topic: 'YOLO',
-    questionText: 'YOLO solves object detection as a single regression problem, producing bounding boxes and class probabilities simultaneously.',
-    options: ['True', 'False', 'Cannot determine', 'Applicable only to classification'],
-    correctAnswer: 'True'
-  },
-
-  // --- NLP ---
-  {
-    topic: 'NLP',
-    questionText: 'What is tokenization in Natural Language Processing (NLP)?',
-    options: ['Encrypting sensitive words', 'Breaking text down into smaller units like words or subwords', 'Tagging parts of speech', 'Removing HTML code tags'],
-    correctAnswer: 'Breaking text down into smaller units like words or subwords'
+    topic: 'CNN',
+    questionText: 'For which type of data are Convolutional Neural Networks (CNNs) most commonly used?',
+    options: ['Tabular spreadsheet data', 'Text documents', 'Images and visual data', 'Audio files only'],
+    correctAnswer: 'Images and visual data'
   },
   {
-    topic: 'NLP',
-    questionText: 'Which of the following is a classic pre-processing step in NLP to reduce words to their base form?',
-    options: ['Tokenization', 'Lemmatization', 'Word Vectorization', 'Regularization'],
-    correctAnswer: 'Lemmatization'
+    topic: 'CNN',
+    questionText: 'In a convolutional layer, what is the sliding window/matrix that performs multiplication over the input image called?',
+    options: ['Kernel (or Filter)', 'Biases', 'Activation', 'Pooling window'],
+    correctAnswer: 'Kernel (or Filter)'
+  },
+  {
+    topic: 'CNN',
+    questionText: 'What is the output shape transition after applying a standard pooling layer in a CNN?',
+    options: ['Increases height and width', 'Decreases height and width (spatial size)', 'Increases channels count', 'Does not change anything'],
+    correctAnswer: 'Decreases height and width (spatial size)'
+  },
+  {
+    topic: 'CNN',
+    questionText: 'Which of the following layers is typically used to flatten the multi-dimensional output of a convolutional layer into a 1D vector before passing it to a fully connected layer?',
+    options: ['Convolutional Layer', 'Pooling Layer', 'Flatten Layer', 'Dropout Layer'],
+    correctAnswer: 'Flatten Layer'
+  },
+  {
+    topic: 'CNN',
+    questionText: 'In a CNN, what does the term "Stride" refer to?',
+    options: ['The size of the kernel matrix', 'The step size by which the filter/kernel slides across the input image', 'The activation value of the neuron', 'The number of channels in the input'],
+    correctAnswer: 'The step size by which the filter/kernel slides across the input image'
   }
 ];
 

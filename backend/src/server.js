@@ -53,14 +53,44 @@ const autoSeed = async () => {
       }
     }
 
-    const questionCount = await Question.countDocuments({});
-    if (questionCount === 0) {
-      console.log('AutoSeed: MCQ Question bank is empty. Seeding question bank...');
-      await Question.insertMany(questionsData);
-      console.log(`AutoSeed: Seeded ${questionsData.length} MCQ questions successfully.`);
-    } else {
-      console.log('AutoSeed: MCQ Question bank check passed.');
+    console.log('AutoSeed: Syncing MCQ Question bank with seed data...');
+    const existingQuestions = await Question.find({});
+    const existingMap = new Map(existingQuestions.map(q => [q.questionText, q]));
+    const seedTexts = new Set(questionsData.map(q => q.questionText));
+    
+    // 1. Delete questions no longer in seed.js (like YOLO and NLP)
+    let deleteCount = 0;
+    for (const eq of existingQuestions) {
+      if (!seedTexts.has(eq.questionText)) {
+        await Question.deleteOne({ _id: eq._id });
+        deleteCount++;
+      }
     }
+    if (deleteCount > 0) {
+      console.log(`AutoSeed: Deleted ${deleteCount} deprecated questions (e.g. YOLO/NLP).`);
+    }
+
+    // 2. Insert new questions or update modified ones
+    let insertCount = 0;
+    let updateCount = 0;
+    for (const sq of questionsData) {
+      const eq = existingMap.get(sq.questionText);
+      if (eq) {
+        const optionsMatch = eq.options.length === sq.options.length && 
+                             eq.options.every((val, index) => val === sq.options[index]);
+        if (eq.topic !== sq.topic || !optionsMatch || eq.correctAnswer !== sq.correctAnswer) {
+          eq.topic = sq.topic;
+          eq.options = sq.options;
+          eq.correctAnswer = sq.correctAnswer;
+          await eq.save();
+          updateCount++;
+        }
+      } else {
+        await Question.create(sq);
+        insertCount++;
+      }
+    }
+    console.log(`AutoSeed: MCQ sync complete. Seeded ${questionsData.length} total. Inserted ${insertCount}, updated ${updateCount} questions.`);
   } catch (error) {
     console.error('AutoSeed: Error during automatic check/seeding:', error.message);
   }
