@@ -185,9 +185,7 @@ const StudentManagement = () => {
     formData.append('file', csvFile);
 
     try {
-      const response = await api.post('/students/import', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      const response = await api.post('/students/import', formData);
       
       const logs = response.data.errors && response.data.errors.length > 0 
         ? `Errors:\n${response.data.errors.join('\n')}` 

@@ -6,6 +6,52 @@ import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 
+const compressImage = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onerror = (err) => reject(err);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onerror = (err) => reject(err);
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 1920;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > MAX_WIDTH) {
+          height = Math.round((height * MAX_WIDTH) / width);
+          width = MAX_WIDTH;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              reject(new Error('Canvas toBlob failed'));
+              return;
+            }
+            const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+              type: 'image/jpeg',
+              lastModified: Date.now(),
+            });
+            resolve(compressedFile);
+          },
+          'image/jpeg',
+          0.7
+        );
+      };
+    };
+  });
+};
+
 const CodingExam = () => {
   const { user } = useAuth();
   const { session, loading, startCodingExam, requestPause } = useExam();
@@ -193,7 +239,7 @@ const CodingExam = () => {
   }
 
   // Handle screenshots selection
-  const handleScreenshotChange = (e, field) => {
+  const handleScreenshotChange = async (e, field) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -204,17 +250,24 @@ const CodingExam = () => {
       return;
     }
 
-    const previewUrl = URL.createObjectURL(file);
+    setErrorMsg('');
+    try {
+      const compressedFile = await compressImage(file);
+      const previewUrl = URL.createObjectURL(compressedFile);
 
-    if (field === 'training') {
-      setScreenshotTraining(file);
-      setPreviewTraining(previewUrl);
-    } else if (field === 'accuracy') {
-      setScreenshotAccuracy(file);
-      setPreviewAccuracy(previewUrl);
-    } else if (field === 'prediction') {
-      setScreenshotPrediction(file);
-      setPreviewPrediction(previewUrl);
+      if (field === 'training') {
+        setScreenshotTraining(compressedFile);
+        setPreviewTraining(previewUrl);
+      } else if (field === 'accuracy') {
+        setScreenshotAccuracy(compressedFile);
+        setPreviewAccuracy(previewUrl);
+      } else if (field === 'prediction') {
+        setScreenshotPrediction(compressedFile);
+        setPreviewPrediction(previewUrl);
+      }
+    } catch (err) {
+      console.error('Image compression failed:', err);
+      setErrorMsg('Failed to process image. Please try another file.');
     }
   };
 
@@ -258,11 +311,7 @@ const CodingExam = () => {
     formData.append('screenshotPrediction', screenshotPrediction);
 
     try {
-      await api.post('/submissions', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      await api.post('/submissions', formData);
 
       // Update local storage status
       if (user) {
