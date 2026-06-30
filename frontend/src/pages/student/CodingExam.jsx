@@ -8,47 +8,48 @@ import { useNavigate } from 'react-router-dom';
 
 const compressImage = (file) => {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onerror = (err) => reject(err);
-    reader.onload = (event) => {
-      const img = new Image();
-      img.src = event.target.result;
-      img.onerror = (err) => reject(err);
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const MAX_WIDTH = 1920;
-        let width = img.width;
-        let height = img.height;
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      
+      const canvas = document.createElement('canvas');
+      const MAX_WIDTH = 1920;
+      let width = img.width;
+      let height = img.height;
 
-        if (width > MAX_WIDTH) {
-          height = Math.round((height * MAX_WIDTH) / width);
-          width = MAX_WIDTH;
-        }
+      if (width > MAX_WIDTH) {
+        height = Math.round((height * MAX_WIDTH) / width);
+        width = MAX_WIDTH;
+      }
 
-        canvas.width = width;
-        canvas.height = height;
+      canvas.width = width;
+      canvas.height = height;
 
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
 
-        canvas.toBlob(
-          (blob) => {
-            if (!blob) {
-              reject(new Error('Canvas toBlob failed'));
-              return;
-            }
-            const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
-              type: 'image/jpeg',
-              lastModified: Date.now(),
-            });
-            resolve(compressedFile);
-          },
-          'image/jpeg',
-          0.7
-        );
-      };
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            reject(new Error('Canvas toBlob failed'));
+            return;
+          }
+          const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+            type: 'image/jpeg',
+            lastModified: Date.now(),
+          });
+          resolve(compressedFile);
+        },
+        'image/jpeg',
+        0.7
+      );
     };
+    img.onerror = (err) => {
+      URL.revokeObjectURL(objectUrl);
+      reject(err);
+    };
+    img.src = objectUrl;
   });
 };
 
