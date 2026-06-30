@@ -252,23 +252,26 @@ const CodingExam = () => {
     }
 
     setErrorMsg('');
+    let finalFile = file;
     try {
-      const compressedFile = await compressImage(file);
-      const previewUrl = URL.createObjectURL(compressedFile);
-
-      if (field === 'training') {
-        setScreenshotTraining(compressedFile);
-        setPreviewTraining(previewUrl);
-      } else if (field === 'accuracy') {
-        setScreenshotAccuracy(compressedFile);
-        setPreviewAccuracy(previewUrl);
-      } else if (field === 'prediction') {
-        setScreenshotPrediction(compressedFile);
-        setPreviewPrediction(previewUrl);
-      }
+      finalFile = await compressImage(file);
     } catch (err) {
-      console.error('Image compression failed:', err);
-      setErrorMsg('Failed to process image. Please try another file.');
+      console.warn('Image compression failed, using original file:', err);
+      // Silently fall back to the original file
+      finalFile = file;
+    }
+
+    const previewUrl = URL.createObjectURL(finalFile);
+
+    if (field === 'training') {
+      setScreenshotTraining(finalFile);
+      setPreviewTraining(previewUrl);
+    } else if (field === 'accuracy') {
+      setScreenshotAccuracy(finalFile);
+      setPreviewAccuracy(previewUrl);
+    } else if (field === 'prediction') {
+      setScreenshotPrediction(finalFile);
+      setPreviewPrediction(previewUrl);
     }
   };
 
