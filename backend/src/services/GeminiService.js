@@ -32,8 +32,9 @@ const evaluateSubmission = async ({
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
+  const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.5-flash',
+    model: modelName,
     generationConfig: { responseMimeType: 'application/json' },
   });
 
@@ -101,10 +102,14 @@ You must return a JSON response matching this schema:
     return evaluation;
   } catch (error) {
     console.error('Gemini API Error:', error);
-    if (error.message && (error.message.includes('401') || error.message.includes('API_KEY_INVALID') || error.message.includes('authentication credentials'))) {
+    const errorMsg = error.message || '';
+    if (errorMsg.includes('401') || errorMsg.includes('API_KEY_INVALID') || errorMsg.includes('authentication credentials')) {
       throw new Error("AI Evaluation failed: Invalid or unauthorized API key. Please check your GEMINI_API_KEY in backend/.env (must be a valid Google AI Studio key starting with 'AIzaSy').");
     }
-    throw new Error(`AI Evaluation failed: ${error.message}`);
+    if (errorMsg.includes('429') || errorMsg.includes('quota') || errorMsg.includes('Quota exceeded') || errorMsg.includes('Too Many Requests')) {
+      throw new Error("AI Evaluation failed: Gemini API quota exceeded (429 Too Many Requests). If you are on the free tier, you may have reached your request limit. Please check your billing/usage details, or try setting GEMINI_MODEL to a different model (e.g. 'gemini-1.5-flash' or 'gemini-1.5-pro') in backend/.env.");
+    }
+    throw new Error(`AI Evaluation failed: ${errorMsg}`);
   }
 };
 
