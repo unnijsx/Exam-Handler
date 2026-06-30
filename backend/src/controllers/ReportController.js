@@ -229,8 +229,47 @@ const exportIndividualMarksheet = async (req, res) => {
   }
 };
 
+// Export all student feedback in Excel format
+const exportStudentFeedback = async (req, res) => {
+  try {
+    const students = await Student.find({
+      feedback: { $exists: true, $ne: null, $ne: '' }
+    }).sort({ fullName: 1 });
+
+    const data = students.map((s, index) => ({
+      'S.No': index + 1,
+      'Student Name': s.fullName,
+      'Email': s.email,
+      'Feedback': s.feedback,
+      'Submission Time': s.submissionTime ? new Date(s.submissionTime).toLocaleString() : 'N/A',
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Student Feedbacks');
+
+    // Adjust column widths
+    const maxLens = {};
+    data.forEach(row => {
+      Object.keys(row).forEach(key => {
+        const valStr = String(row[key]);
+        maxLens[key] = Math.max(maxLens[key] || 10, valStr.length);
+      });
+    });
+    worksheet['!cols'] = Object.keys(maxLens).map(key => ({ wch: Math.min(maxLens[key] + 3, 55) }));
+
+    const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=EvalAI_Student_Feedbacks.xlsx');
+    res.send(buffer);
+  } catch (error) {
+    res.status(500).json({ message: 'Feedback export failed: ' + error.message });
+  }
+};
+
 module.exports = {
   exportExcelResults,
   exportPdfResults,
   exportIndividualMarksheet,
+  exportStudentFeedback,
 };

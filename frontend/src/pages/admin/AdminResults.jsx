@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Card, CardContent, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Chip, LinearProgress, Stack, TextField, InputAdornment, useTheme, CircularProgress, Tooltip, Grid, Divider } from '@mui/material';
-import { FileDownload, Print, Search, PictureAsPdf, Check, Warning } from '@mui/icons-material';
+import { FileDownload, Print, Search, PictureAsPdf, Check, Warning, Feedback } from '@mui/icons-material';
 import api from '../../services/api';
 
 const AdminResults = () => {
@@ -78,6 +78,10 @@ const AdminResults = () => {
     downloadReport('/reports/pdf-book', 'EvalAI_Campus_General_Report.pdf');
   };
 
+  const handleExportFeedback = () => {
+    downloadReport('/reports/feedback', 'EvalAI_Student_Feedbacks.xlsx');
+  };
+
   const handlePrintMarksheet = (studentId, studentName) => {
     const sanitizedName = studentName.replace(/\s+/g, '_');
     downloadReport(`/reports/marksheet/${studentId}`, `Marksheet_${sanitizedName}.pdf`);
@@ -95,6 +99,9 @@ const AdminResults = () => {
           </Button>
           <Button variant="outlined" color="secondary" startIcon={<PictureAsPdf />} onClick={handleExportPdfBook}>
             Download PDF Book
+          </Button>
+          <Button variant="outlined" color="info" startIcon={<Feedback />} onClick={handleExportFeedback}>
+            Download Feedbacks
           </Button>
           <Button
             variant={published ? "contained" : "outlined"}
