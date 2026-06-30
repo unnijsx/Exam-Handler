@@ -88,6 +88,11 @@ You must return a JSON response matching this schema:
       parts.push(fileToGenerativePart(screenshotPredictionPath));
     }
 
+    // Quick sanity check on key format for developer assistance
+    if (!apiKey.startsWith('AIzaSy')) {
+      console.warn("⚠️ Warning: GEMINI_API_KEY in backend/.env does not start with 'AIzaSy'. Google AI Studio keys typically begin with 'AIzaSy'.");
+    }
+
     const result = await model.generateContent(parts);
     const responseText = result.response.text();
     
@@ -96,6 +101,9 @@ You must return a JSON response matching this schema:
     return evaluation;
   } catch (error) {
     console.error('Gemini API Error:', error);
+    if (error.message && (error.message.includes('401') || error.message.includes('API_KEY_INVALID') || error.message.includes('authentication credentials'))) {
+      throw new Error("AI Evaluation failed: Invalid or unauthorized API key. Please check your GEMINI_API_KEY in backend/.env (must be a valid Google AI Studio key starting with 'AIzaSy').");
+    }
     throw new Error(`AI Evaluation failed: ${error.message}`);
   }
 };
