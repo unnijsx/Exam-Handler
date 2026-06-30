@@ -26,25 +26,42 @@ const saveExamState = async (req, res) => {
   const { mcqAnswers, currentQuestionIndex, mcqTimeRemaining, codingTimeRemaining } = req.body;
 
   try {
-    const session = await ExamSession.findOne({ studentId: req.student._id });
+    // Only fetch isPaused field to avoid loading massive arrays like mcqOptionsShuffled
+    const session = await ExamSession.findOne({ studentId: req.student._id }, 'isPaused');
     if (!session) {
       return res.status(404).json({ message: 'Exam session not found.' });
     }
 
-    // Save states
-    if (mcqAnswers) session.mcqAnswers = mcqAnswers;
-    if (currentQuestionIndex !== undefined) session.currentQuestionIndex = currentQuestionIndex;
+    const updateFields = {};
+    if (mcqAnswers) updateFields.mcqAnswers = mcqAnswers;
+    if (currentQuestionIndex !== undefined) updateFields.currentQuestionIndex = currentQuestionIndex;
     
-    // Only update remaining times if NOT paused
     if (!session.isPaused) {
-      if (mcqTimeRemaining !== undefined) session.mcqTimeRemaining = mcqTimeRemaining;
-      if (codingTimeRemaining !== undefined) session.codingTimeRemaining = codingTimeRemaining;
+      if (mcqTimeRemaining !== undefined) updateFields.mcqTimeRemaining = mcqTimeRemaining;
+      if (codingTimeRemaining !== undefined) updateFields.codingTimeRemaining = codingTimeRemaining;
     }
     
-    session.lastSavedAt = Date.now();
-    await session.save();
+    updateFields.lastSavedAt = Date.now();
 
-    res.json({ message: 'Progress saved successfully.', lastSavedAt: session.lastSavedAt, isPaused: session.isPaused });
+    await ExamSession.updateOne({ _id: session._id }, { $set: updateFields });
+
+    res.json({ message: 'Progress saved successfully.', lastSavedAt: updateFields.lastSavedAt, isPaused: session.isPaused });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Retrieve minimal exam session status (isPaused, pauseRequested, etc.) for lightweight polling
+const getStudentExamStatus = async (req, res) => {
+  try {
+    const session = await ExamSession.findOne(
+      { studentId: req.student._id },
+      'isPaused pauseRequested mcqCompleted codingCompleted'
+    );
+    if (!session) {
+      return res.status(404).json({ message: 'Exam session not found.' });
+    }
+    res.json(session);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -228,6 +245,7 @@ const saveFeedback = async (req, res) => {
 module.exports = {
   getStudentSession,
   saveExamState,
+  getStudentExamStatus,
   submitMcqExam,
   startExam,
   startCodingExam,

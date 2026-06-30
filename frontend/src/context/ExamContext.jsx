@@ -17,6 +17,7 @@ export const ExamProvider = ({ children }) => {
   const saveIntervalRef = useRef(null);
   const tickIntervalRef = useRef(null);
   const sessionRef = useRef(null); 
+  const saveTimeoutRef = useRef(null);
 
   // Refs for tracking real-time states in interval callback closures
   const timeRemainingRef = useRef(timeRemaining);
@@ -94,6 +95,14 @@ export const ExamProvider = ({ children }) => {
     }
   };
 
+  // Debounced save to reduce server load
+  const debouncedSaveState = (forceSaveData = null) => {
+    if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    saveTimeoutRef.current = setTimeout(() => {
+      saveState(forceSaveData);
+    }, 5000); // 5 seconds debounce
+  };
+
   // Officially start the exam
   const startExam = async () => {
     try {
@@ -141,14 +150,14 @@ export const ExamProvider = ({ children }) => {
   const selectOption = (questionId, optionValue) => {
     const updatedAnswers = { ...answers, [questionId]: optionValue };
     setAnswers(updatedAnswers);
-    // Trigger immediate state save for quick responsiveness
-    saveState({ answers: updatedAnswers, currentIdx, timeRemaining });
+    // Trigger debounced save to reduce server load
+    debouncedSaveState({ answers: updatedAnswers, currentIdx, timeRemaining: timeRemainingRef.current });
   };
 
   // Move to next/prev index
   const navigateToQuestion = (index) => {
     setCurrentIdx(index);
-    saveState({ answers, currentIdx: index, timeRemaining });
+    debouncedSaveState({ answers, currentIdx: index, timeRemaining: timeRemainingRef.current });
   };
 
   // Submit MCQ Phase
@@ -165,6 +174,33 @@ export const ExamProvider = ({ children }) => {
     }
   };
 
+  const pollSessionStatus = async () => {
+    if (!user || user.role !== 'student') return;
+    try {
+      const response = await api.get('/exam/status');
+      const data = response.data;
+      setSession((prevSession) => {
+        if (!prevSession) return prevSession;
+        return {
+          ...prevSession,
+          isPaused: data.isPaused,
+          pauseRequested: data.pauseRequested,
+          mcqCompleted: data.mcqCompleted,
+          codingCompleted: data.codingCompleted,
+        };
+      });
+    } catch (error) {
+      console.error('Failed to poll exam status:', error);
+    }
+  };
+
+  // Clean up debounced save timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    };
+  }, []);
+
   // Load session when user signs in as Student
   useEffect(() => {
     if (user && user.role === 'student' && user.examStatus !== 'completed') {
@@ -175,13 +211,13 @@ export const ExamProvider = ({ children }) => {
     }
   }, [user]);
 
-  // Sync / Poll session from server periodically to fetch admin pauses
+  // Sync / Poll session status from server periodically to fetch admin pauses (lightweight polling)
   useEffect(() => {
     if (!user || user.role !== 'student' || user.examStatus === 'completed') return;
 
     const pollInterval = setInterval(() => {
-      fetchSession(false);
-    }, 4000);
+      pollSessionStatus();
+    }, 10000); // Poll status every 10 seconds
 
     return () => clearInterval(pollInterval);
   }, [user]);
@@ -224,7 +260,7 @@ export const ExamProvider = ({ children }) => {
     };
   }, [timeRemaining, loading, session?.isPaused, session?.codingStarted, session?.examStarted, user?.examStatus]);
 
-  // Setup Autosave interval (Every 5 seconds)
+  // Setup Autosave interval (Every 30 seconds)
   useEffect(() => {
     if (!session || !session.examStarted || loading || user?.examStatus === 'completed' || session.isPaused) {
       if (saveIntervalRef.current) clearInterval(saveIntervalRef.current);
@@ -238,7 +274,7 @@ export const ExamProvider = ({ children }) => {
 
     saveIntervalRef.current = setInterval(() => {
       saveState();
-    }, 5000); // Save time and answers every 5 seconds
+    }, 30000); // Save time and answers every 30 seconds
 
     return () => {
       if (saveIntervalRef.current) clearInterval(saveIntervalRef.current);

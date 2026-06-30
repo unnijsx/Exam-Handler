@@ -4,6 +4,7 @@ const { protectStudent } = require('../middleware/AuthMiddleware');
 const {
   getStudentSession,
   saveExamState,
+  getStudentExamStatus,
   submitMcqExam,
   startExam,
   startCodingExam,
@@ -17,6 +18,7 @@ const {
 router.use(protectStudent);
 
 router.get('/session', getStudentSession);
+router.get('/status', getStudentExamStatus);
 router.get('/my-result', getMyResult);
 router.get('/profile', getStudentProfile);
 router.post('/feedback', saveFeedback);
