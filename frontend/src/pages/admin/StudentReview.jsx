@@ -19,6 +19,7 @@ const StudentReview = () => {
 
   // Manual marking override state
   const [manualCodingScore, setManualCodingScore] = useState('');
+  const [manualMcqScore, setManualMcqScore] = useState('');
   const [overriding, setOverriding] = useState(false);
 
   const fetchStudentDetails = async () => {
@@ -27,6 +28,9 @@ const StudentReview = () => {
       setData(response.data);
       if (response.data.student.codingScore !== null) {
         setManualCodingScore(response.data.student.codingScore.toString());
+      }
+      if (response.data.student.mcqScore !== null) {
+        setManualMcqScore(response.data.student.mcqScore.toString());
       }
     } catch (err) {
       console.error(err);
@@ -57,15 +61,32 @@ const StudentReview = () => {
   };
 
   const handleOverrideScoreSubmit = async () => {
-    if (manualCodingScore === '' || isNaN(manualCodingScore)) {
-      setErrorMsg('Please enter a valid numeric grade.');
+    const payload = {};
+    if (manualCodingScore !== '') {
+      if (isNaN(manualCodingScore)) {
+        setErrorMsg('Please enter a valid numeric grade for coding.');
+        return;
+      }
+      payload.codingScore = Number(manualCodingScore);
+    }
+    if (manualMcqScore !== '') {
+      if (isNaN(manualMcqScore)) {
+        setErrorMsg('Please enter a valid numeric grade for MCQ.');
+        return;
+      }
+      payload.mcqScore = Number(manualMcqScore);
+    }
+
+    if (Object.keys(payload).length === 0) {
+      setErrorMsg('Please enter at least one score to update.');
       return;
     }
+
     setOverriding(true);
     setErrorMsg('');
     try {
-      await api.post(`/evaluations/${id}/override`, { codingScore: Number(manualCodingScore) });
-      setEvalSuccess('Final coding score successfully updated.');
+      await api.post(`/evaluations/${id}/override`, payload);
+      setEvalSuccess('Student scores successfully updated.');
       await fetchStudentDetails();
     } catch (err) {
       setErrorMsg(err.response?.data?.message || 'Score override failed.');
@@ -373,26 +394,40 @@ const StudentReview = () => {
           </Card>
  
           {/* Manual Marking / Grading overwrite card */}
-          <Card>
+          <Card sx={{ border: `1px solid ${theme.palette.divider}` }}>
             <CardContent>
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5 }}>
                 Manual Marking Overrides
               </Typography>
               
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                As an instructor, you can override and edit the student's coding score. The final aggregate will re-sum with their MCQ score.
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
+                As an instructor, you can override and edit the student's MCQ and coding scores. The final aggregate grade will automatically recalculate.
               </Typography>
  
-              <TextField
-                label="Manual Coding Score (Max 50)"
-                type="number"
-                fullWidth
-                size="small"
-                value={manualCodingScore}
-                onChange={(e) => setManualCodingScore(e.target.value)}
-                disabled={overriding || !submission}
-                sx={{ mb: 2 }}
-              />
+              <Grid container spacing={2} sx={{ mb: 2.5 }}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Manual MCQ Score (Max 50)"
+                    type="number"
+                    fullWidth
+                    size="small"
+                    value={manualMcqScore}
+                    onChange={(e) => setManualMcqScore(e.target.value)}
+                    disabled={overriding}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Manual Coding Score (Max 50)"
+                    type="number"
+                    fullWidth
+                    size="small"
+                    value={manualCodingScore}
+                    onChange={(e) => setManualCodingScore(e.target.value)}
+                    disabled={overriding}
+                  />
+                </Grid>
+              </Grid>
 
               <Button
                 variant="contained"
@@ -400,9 +435,9 @@ const StudentReview = () => {
                 fullWidth
                 startIcon={<Check />}
                 onClick={handleOverrideScoreSubmit}
-                disabled={overriding || !submission || manualCodingScore === ''}
+                disabled={overriding || (manualCodingScore === '' && manualMcqScore === '')}
               >
-                {overriding ? 'Updating Score...' : 'Apply & Save Score'}
+                {overriding ? 'Updating Scores...' : 'Apply & Save Scores'}
               </Button>
             </CardContent>
           </Card>

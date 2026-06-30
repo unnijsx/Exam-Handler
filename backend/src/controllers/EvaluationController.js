@@ -132,15 +132,10 @@ const aiEvaluateStudent = async (req, res) => {
 // Override / Save Final Student Score manually
 const overrideScore = async (req, res) => {
   const { studentId } = req.params;
-  const { codingScore } = req.body;
+  const { codingScore, mcqScore } = req.body;
 
-  if (codingScore === undefined || isNaN(codingScore)) {
-    return res.status(400).json({ message: 'Valid Coding Score is required.' });
-  }
-
-  const scoreNum = Number(codingScore);
-  if (scoreNum < 0 || scoreNum > 50) {
-    return res.status(400).json({ message: 'Coding score must be between 0 and 50.' });
+  if (codingScore === undefined && mcqScore === undefined) {
+    return res.status(400).json({ message: 'Either Coding Score or MCQ Score must be provided.' });
   }
 
   try {
@@ -149,15 +144,37 @@ const overrideScore = async (req, res) => {
       return res.status(404).json({ message: 'Student not found.' });
     }
 
-    student.codingScore = scoreNum;
-    student.finalScore = (student.mcqScore || 0) + scoreNum;
+    if (codingScore !== undefined) {
+      if (codingScore === '' || isNaN(codingScore)) {
+        return res.status(400).json({ message: 'Valid Coding Score is required.' });
+      }
+      const scoreNum = Number(codingScore);
+      if (scoreNum < 0 || scoreNum > 50) {
+        return res.status(400).json({ message: 'Coding score must be between 0 and 50.' });
+      }
+      student.codingScore = scoreNum;
+    }
+
+    if (mcqScore !== undefined) {
+      if (mcqScore === '' || isNaN(mcqScore)) {
+        return res.status(400).json({ message: 'Valid MCQ Score is required.' });
+      }
+      const mcqNum = Number(mcqScore);
+      if (mcqNum < 0 || mcqNum > 50) {
+        return res.status(400).json({ message: 'MCQ score must be between 0 and 50.' });
+      }
+      student.mcqScore = mcqNum;
+    }
+
+    student.finalScore = (student.mcqScore || 0) + (student.codingScore || 0);
     await student.save();
 
     const result = await Result.findOneAndUpdate(
       { studentId },
       {
-        codingScore: scoreNum,
-        finalScore: (student.mcqScore || 0) + scoreNum,
+        codingScore: student.codingScore || 0,
+        mcqScore: student.mcqScore || 0,
+        finalScore: student.finalScore,
         markedByAdmin: true,
       },
       { new: true, upsert: true }
