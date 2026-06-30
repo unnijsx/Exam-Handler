@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 const compressImage = (file) => {
   return new Promise((resolve, reject) => {
-    const img = new Image();
+    const img = new window.Image();
     const objectUrl = URL.createObjectURL(file);
     img.onload = () => {
       URL.revokeObjectURL(objectUrl);
